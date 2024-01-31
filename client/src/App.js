@@ -1,25 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
+import logo from './logo.svg';
 
 function App() {
-    const [response, setResponse] = useState('Oops, something went wrong...')
-    useEffect(() =>{
-        async function checkAPIRoute() {
-            try {
-                const host = process.env.REACT_APP_HOST || "http://localhost:5000"
-                const response = await fetch(
-                    `${host}/api`
-                )
-                if (response.status === 200) {
-                    setResponse("a Success!!!")
-                }
-            } catch (err) {
-                setResponse("Oops, something went wrong...")
-            }
+  const [response, setResponse] = useState('Oops, something went wrong...')
+  useEffect(() => {
+    async function checkAPIRoute() {
+      try {
+        const host = process.env.REACT_APP_HOST || "http://localhost:5001"
+        const response = await fetch(
+          `${host}/api`
+        )
+        const { data } = await response.json();
+        if (data) {
+          setResponse(data)
         }
-        checkAPIRoute()
-    }, [response])
+      } catch (err) {
+        setResponse("Oops, something went wrong...")
+      }
+    }
+    checkAPIRoute()
+  }, [response])
 
   return (
     <div className="App">
@@ -37,7 +38,7 @@ function App() {
         >
         </a>
         <h1>The API call is...</h1>
-          <h2>{response}</h2>
+        <h2>{response}</h2>
       </header>
     </div>
   );
